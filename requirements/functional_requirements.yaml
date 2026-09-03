@@ -1,0 +1,84 @@
+functional_requirements:
+
+  - id: RF-001
+    name: "Carga de datos históricos"
+    description: >
+      El sistema deberá permitir incorporar
+      información histórica relacionada con créditos.
+    priority: high
+    status: draft
+
+  - id: RF-002
+    name: "Validación de calidad de datos"
+    description: >
+      El sistema deberá validar estructura,
+      campos obligatorios, duplicados,
+      valores nulos e inconsistencias.
+    priority: high
+    status: draft
+
+  - id: RF-003
+    name: "Transformación de datos"
+    description: >
+      El sistema deberá limpiar y transformar
+      los datos antes de utilizarlos para análisis
+      y entrenamiento de modelos.
+    priority: high
+    status: draft
+
+  - id: RF-004
+    name: "Persistencia de información"
+    description: >
+      El sistema deberá almacenar los datos procesados
+      en una base de datos.
+    priority: high
+    status: draft
+
+  - id: RF-005
+    name: "Entrenamiento de modelos"
+    description: >
+      El sistema deberá permitir entrenar diferentes
+      modelos de Machine Learning para estimar
+      probabilidades relacionadas con la recuperación.
+    priority: high
+    status: draft
+
+  - id: RF-006
+    name: "Comparación de modelos"
+    description: >
+      El sistema deberá comparar los modelos utilizando
+      métricas de evaluación definidas.
+    priority: high
+    status: draft
+
+  - id: RF-007
+    name: "Predicción de recuperación"
+    description: >
+      El sistema deberá estimar la probabilidad
+      de recuperación asociada a cada obligación.
+    priority: high
+    status: draft
+
+  - id: RF-008
+    name: "Valoración de cartera"
+    description: >
+      El sistema deberá generar estimaciones financieras
+      relacionadas con una cartera analizada.
+    priority: high
+    status: draft
+
+  - id: RF-009
+    name: "Cálculo de indicadores financieros"
+    description: >
+      El sistema deberá permitir calcular indicadores
+      como VPN, TIR y ROI.
+    priority: medium
+    status: draft
+
+  - id: RF-010
+    name: "Consulta de resultados"
+    description: >
+      El sistema deberá permitir consultar resultados
+      de predicción y valoración.
+    priority: medium
+    status: draft

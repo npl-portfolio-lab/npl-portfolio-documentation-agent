@@ -1,0 +1,22 @@
+actors:
+
+  - id: ACT-001
+    name: "Analista de riesgo"
+    description: >
+      Usuario encargado de analizar cartera,
+      revisar resultados de modelos predictivos
+      y evaluar niveles de riesgo.
+
+  - id: ACT-002
+    name: "Analista financiero"
+    description: >
+      Usuario encargado de evaluar la rentabilidad
+      de la cartera, analizar flujos de recuperación
+      y consultar indicadores como VPN, TIR y ROI.
+
+  - id: ACT-003
+    name: "Administrador"
+    description: >
+      Usuario responsable de administrar
+      configuraciones, accesos y operación general
+      del sistema.

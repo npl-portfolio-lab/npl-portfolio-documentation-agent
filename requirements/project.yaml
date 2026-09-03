@@ -1,0 +1,29 @@
+project:
+  id: NPL-001
+
+  name: "NPL Portfolio Valuation & Machine Learning"
+
+  description: >
+    Sistema para analizar cartera castigada,
+    estimar probabilidades de recuperación,
+    proyectar flujos de recuperación y apoyar
+    procesos de valoración financiera de carteras.
+
+  problem_statement: >
+    Las organizaciones que administran o adquieren
+    cartera castigada necesitan estimar la probabilidad
+    de recuperación de cada obligación y determinar
+    el valor económico esperado de una cartera.
+
+  general_objective: >
+    Construir una plataforma de datos y Machine Learning
+    capaz de estimar probabilidades de recuperación
+    de créditos y apoyar la valoración financiera
+    de carteras NPL.
+
+  domains:
+    - data_engineering
+    - data_science
+    - machine_learning
+    - financial_valuation
+    - software_engineering

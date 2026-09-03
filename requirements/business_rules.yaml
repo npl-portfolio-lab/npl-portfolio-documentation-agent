@@ -1,0 +1,199 @@
+business_rules:
+
+  - id: RN-001
+    name: "Validación de estructura de datos"
+    description: >
+      Todo archivo o conjunto de datos cargado al sistema deberá cumplir
+      con la estructura esperada y contener los campos obligatorios
+      antes de iniciar cualquier procesamiento.
+    category: "data_quality"
+    priority: "high"
+
+  - id: RN-002
+    name: "Control de registros duplicados"
+    description: >
+      El sistema deberá identificar registros duplicados antes de persistir
+      la información y deberá aplicar la estrategia de tratamiento definida
+      para evitar duplicidad en los análisis.
+    category: "data_quality"
+    priority: "high"
+
+  - id: RN-003
+    name: "Control de valores inválidos"
+    description: >
+      Los registros con valores nulos, formatos incorrectos, inconsistencias
+      lógicas o valores fuera de los rangos permitidos deberán ser identificados
+      durante el proceso de calidad de datos.
+    category: "data_quality"
+    priority: "high"
+
+  - id: RN-004
+    name: "Persistencia posterior a validación"
+    description: >
+      La información solo podrá ser almacenada como información procesada
+      después de superar las validaciones de calidad definidas.
+    category: "data_engineering"
+    priority: "high"
+
+  - id: RN-005
+    name: "Evaluación obligatoria de modelos"
+    description: >
+      Todo modelo de Machine Learning deberá ser evaluado mediante métricas
+      definidas antes de ser considerado válido para generar predicciones.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-006
+    name: "Comparación de modelos"
+    description: >
+      Cuando existan múltiples modelos candidatos, el sistema deberá comparar
+      sus métricas y seleccionar el modelo que cumpla los criterios de aceptación
+      definidos para el proyecto.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-007
+    name: "Predicciones basadas en modelos aprobados"
+    description: >
+      Las probabilidades de recuperación solo podrán generarse utilizando
+      modelos previamente evaluados y aprobados.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-008
+    name: "Probabilidad de recuperación acotada"
+    description: >
+      Toda probabilidad estimada de recuperación deberá encontrarse
+      en un rango entre 0 y 1.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-009
+    name: "Valoración basada en recuperación esperada"
+    description: >
+      La valoración financiera de una cartera deberá considerar la recuperación
+      esperada estimada a partir de los resultados analíticos y predictivos.
+    category: "financial_valuation"
+    priority: "high"
+
+  - id: RN-010
+    name: "Cálculo obligatorio de indicadores financieros"
+    description: >
+      El proceso de valoración deberá permitir calcular como mínimo
+      VPN, TIR y ROI cuando exista información suficiente para ello.
+    category: "financial_valuation"
+    priority: "high"
+
+  - id: RN-011
+    name: "Aplicación de tasa de descuento"
+    description: >
+      Los flujos futuros utilizados para calcular el VPN deberán descontarse
+      utilizando una tasa de descuento definida para el escenario de valoración.
+    category: "financial_valuation"
+    priority: "high"
+
+  - id: RN-012
+    name: "Consideración de costos de recuperación"
+    description: >
+      La valoración deberá considerar los costos asociados al proceso de recuperación
+      cuando dichos costos se encuentren disponibles.
+    category: "financial_valuation"
+    priority: "medium"
+
+  - id: RN-013
+    name: "Flujos de recuperación no negativos"
+    description: >
+      Los flujos de recuperación proyectados no podrán registrar valores negativos
+      salvo que correspondan explícitamente a costos o egresos asociados.
+    category: "financial_valuation"
+    priority: "medium"
+
+  - id: RN-014
+    name: "Trazabilidad del modelo utilizado"
+    description: >
+      Toda predicción deberá mantener referencia al modelo y versión utilizados
+      para generar el resultado.
+    category: "governance"
+    priority: "high"
+
+  - id: RN-015
+    name: "Trazabilidad de resultados financieros"
+    description: >
+      Toda valoración deberá mantener referencia a los datos, supuestos,
+      parámetros financieros y resultados utilizados en su cálculo.
+    category: "governance"
+    priority: "high"
+
+  - id: RN-016
+    name: "Separación entre entrenamiento y evaluación"
+    description: >
+      Los datos utilizados para evaluar un modelo no deberán utilizarse
+      simultáneamente como datos de entrenamiento del mismo modelo.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-017
+    name: "Control de fuga de información"
+    description: >
+      Las variables utilizadas por los modelos no deberán contener información
+      futura o información que no estaría disponible en el momento real
+      de realizar una predicción.
+    category: "machine_learning"
+    priority: "high"
+
+  - id: RN-018
+    name: "Registro de métricas del modelo"
+    description: >
+      Las métricas obtenidas durante la evaluación de los modelos deberán
+      almacenarse para permitir comparación, auditoría y backtesting.
+    category: "machine_learning"
+    priority: "medium"
+
+  - id: RN-019
+    name: "Backtesting de modelos"
+    description: >
+      Los modelos aprobados deberán poder compararse posteriormente contra
+      resultados reales para evaluar su desempeño histórico.
+    category: "model_validation"
+    priority: "medium"
+
+  - id: RN-020
+    name: "Escenarios de valoración"
+    description: >
+      El sistema deberá permitir diferenciar escenarios de valoración,
+      como mínimo un escenario base y escenarios alternativos cuando
+      se realicen análisis de sensibilidad o simulación.
+    category: "financial_valuation"
+    priority: "medium"
+
+  - id: RN-021
+    name: "Identificación única de obligaciones"
+    description: >
+      Cada obligación o crédito deberá contar con un identificador único
+      que permita mantener trazabilidad durante todo el procesamiento.
+    category: "data_governance"
+    priority: "high"
+
+  - id: RN-022
+    name: "Consistencia del saldo de obligación"
+    description: >
+      El saldo de una obligación deberá ser mayor o igual a cero
+      y deberá representar el valor vigente utilizado para análisis.
+    category: "data_quality"
+    priority: "high"
+
+  - id: RN-023
+    name: "Consistencia de fechas"
+    description: >
+      Las fechas asociadas a una obligación deberán mantener una secuencia
+      temporal válida y no podrán contener inconsistencias lógicas.
+    category: "data_quality"
+    priority: "high"
+
+  - id: RN-024
+    name: "Reproducibilidad de resultados"
+    description: >
+      Los procesos analíticos y de Machine Learning deberán registrar
+      parámetros suficientes para permitir reproducir los resultados obtenidos.
+    category: "governance"
+    priority: "medium"

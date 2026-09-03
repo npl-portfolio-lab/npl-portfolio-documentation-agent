@@ -1,0 +1,370 @@
+use_cases:
+
+  - id: CU-001
+    related_requirement: RF-001
+    primary_actor: ACT-001
+    name: "Carga de datos históricos"
+
+    objective: >
+      Permitir incorporar información histórica de créditos
+      para su posterior validación, transformación y análisis.
+
+    preconditions:
+      - "El usuario debe tener acceso autorizado al sistema."
+      - "El archivo o fuente de datos debe estar disponible."
+
+    main_flow:
+      - "El usuario selecciona la fuente de datos histórica."
+      - "El sistema recibe el archivo o conjunto de datos."
+      - "El sistema verifica que el archivo pueda ser leído."
+      - "El sistema identifica las columnas disponibles."
+      - "El sistema registra la carga recibida."
+      - "El sistema deja los datos disponibles para validación de calidad."
+
+    alternative_flows:
+      - "Si el archivo no puede ser leído, el sistema rechaza la carga."
+      - "Si el formato no es compatible, el sistema informa el error al usuario."
+
+    postconditions:
+      - "Los datos históricos quedan disponibles para el proceso de validación."
+
+    business_rules:
+      - RN-001
+      - RN-021
+      - RN-022
+      - RN-023
+
+
+  - id: CU-002
+    related_requirement: RF-002
+    primary_actor: ACT-001
+    name: "Validación de calidad de datos"
+
+    objective: >
+      Verificar que los datos cargados cumplan con las condiciones
+      mínimas de calidad necesarias para continuar el procesamiento.
+
+    preconditions:
+      - "Debe existir un conjunto de datos previamente cargado."
+
+    main_flow:
+      - "El sistema recibe el conjunto de datos cargado."
+      - "El sistema valida la estructura de columnas."
+      - "El sistema verifica campos obligatorios."
+      - "El sistema identifica registros duplicados."
+      - "El sistema identifica valores nulos."
+      - "El sistema detecta formatos y valores inconsistentes."
+      - "El sistema genera un resumen de calidad de datos."
+      - "El sistema determina si los datos pueden continuar al proceso de transformación."
+
+    alternative_flows:
+      - "Si faltan campos obligatorios, el sistema rechaza el conjunto de datos."
+      - "Si existen duplicados, el sistema registra los registros identificados."
+      - "Si existen inconsistencias, el sistema registra las observaciones para tratamiento."
+
+    postconditions:
+      - "El conjunto de datos queda clasificado como válido o con incidencias de calidad."
+
+    business_rules:
+      - RN-001
+      - RN-002
+      - RN-003
+      - RN-021
+      - RN-022
+      - RN-023
+
+
+  - id: CU-003
+    related_requirement: RF-003
+    primary_actor: ACT-001
+    name: "Transformación de datos"
+
+    objective: >
+      Limpiar, normalizar y transformar los datos previamente validados
+      para dejarlos listos para análisis, modelado y valoración.
+
+    preconditions:
+      - "Debe existir un conjunto de datos validado."
+      - "Las incidencias críticas de calidad deben haber sido tratadas."
+
+    main_flow:
+      - "El sistema recibe el conjunto de datos validado."
+      - "El sistema estandariza nombres y tipos de datos."
+      - "El sistema transforma formatos de fechas."
+      - "El sistema aplica reglas para tratamiento de valores faltantes."
+      - "El sistema normaliza variables requeridas."
+      - "El sistema genera el conjunto de datos procesado."
+      - "El sistema registra las transformaciones aplicadas."
+
+    alternative_flows:
+      - "Si una transformación no puede aplicarse, el sistema registra la incidencia."
+      - "Si un registro incumple reglas críticas, el sistema lo separa para revisión."
+
+    postconditions:
+      - "Existe un conjunto de datos transformado y disponible para persistencia o análisis."
+
+    business_rules:
+      - RN-003
+      - RN-021
+      - RN-022
+      - RN-023
+
+
+  - id: CU-004
+    related_requirement: RF-004
+    primary_actor: ACT-003
+    name: "Persistencia de información"
+
+    objective: >
+      Almacenar de forma controlada la información procesada
+      garantizando consistencia, trazabilidad y disponibilidad.
+
+    preconditions:
+      - "Debe existir un conjunto de datos procesado."
+      - "Los datos deben haber superado las validaciones definidas."
+
+    main_flow:
+      - "El sistema recibe el conjunto de datos procesado."
+      - "El sistema verifica que la información sea apta para persistencia."
+      - "El sistema prepara los registros para almacenamiento."
+      - "El sistema almacena la información en la base de datos."
+      - "El sistema registra el resultado de la operación."
+      - "El sistema deja la información disponible para procesos posteriores."
+
+    alternative_flows:
+      - "Si ocurre un error de persistencia, el sistema revierte la operación cuando corresponda."
+      - "Si existen registros inválidos, el sistema evita su persistencia como datos procesados."
+
+    postconditions:
+      - "La información válida queda almacenada y disponible para consulta."
+
+    business_rules:
+      - RN-004
+      - RN-021
+      - RN-024
+
+
+  - id: CU-005
+    related_requirement: RF-005
+    primary_actor: ACT-001
+    name: "Entrenamiento de modelos"
+
+    objective: >
+      Entrenar modelos de Machine Learning utilizando información histórica
+      preparada para estimar probabilidades de recuperación.
+
+    preconditions:
+      - "Debe existir un dataset preparado para modelado."
+      - "Las variables objetivo y predictoras deben estar definidas."
+      - "Los datos deben permitir separar entrenamiento y evaluación."
+
+    main_flow:
+      - "El analista selecciona el dataset de entrenamiento."
+      - "El sistema prepara las variables predictoras y la variable objetivo."
+      - "El sistema divide los datos para entrenamiento y evaluación."
+      - "El sistema entrena los modelos configurados."
+      - "El sistema registra parámetros y versiones de los modelos."
+      - "El sistema calcula las métricas iniciales."
+      - "El sistema almacena los resultados del entrenamiento."
+
+    alternative_flows:
+      - "Si el dataset no cumple las condiciones mínimas, el sistema bloquea el entrenamiento."
+      - "Si un modelo falla durante el entrenamiento, el sistema registra el error y continúa con los modelos restantes cuando sea posible."
+
+    postconditions:
+      - "Existen modelos entrenados disponibles para evaluación y comparación."
+
+    business_rules:
+      - RN-005
+      - RN-016
+      - RN-017
+      - RN-018
+      - RN-024
+
+
+  - id: CU-006
+    related_requirement: RF-006
+    primary_actor: ACT-001
+    name: "Comparación de modelos"
+
+    objective: >
+      Comparar el desempeño de los modelos entrenados mediante métricas
+      definidas para seleccionar el modelo más adecuado.
+
+    preconditions:
+      - "Deben existir dos o más modelos entrenados o al menos un modelo candidato evaluable."
+      - "Debe existir un conjunto de evaluación independiente."
+
+    main_flow:
+      - "El sistema recupera los modelos candidatos."
+      - "El sistema ejecuta la evaluación sobre los datos definidos."
+      - "El sistema calcula las métricas de cada modelo."
+      - "El sistema compara los resultados obtenidos."
+      - "El sistema identifica el modelo con mejor desempeño según los criterios establecidos."
+      - "El sistema registra la comparación y las métricas."
+
+    alternative_flows:
+      - "Si ningún modelo cumple los criterios mínimos, el sistema no aprueba un modelo para predicción."
+      - "Si faltan métricas necesarias, el sistema marca la comparación como incompleta."
+
+    postconditions:
+      - "Existe un resultado de comparación de modelos."
+      - "Puede existir un modelo seleccionado para predicción."
+
+    business_rules:
+      - RN-005
+      - RN-006
+      - RN-018
+      - RN-019
+
+
+  - id: CU-007
+    related_requirement: RF-007
+    primary_actor: ACT-001
+    name: "Predicción de recuperación"
+
+    objective: >
+      Estimar la probabilidad de recuperación asociada a cada obligación
+      utilizando un modelo previamente evaluado y aprobado.
+
+    preconditions:
+      - "Debe existir un modelo aprobado para predicción."
+      - "Las obligaciones deben contar con las variables requeridas por el modelo."
+
+    main_flow:
+      - "El sistema recibe las obligaciones que serán evaluadas."
+      - "El sistema recupera el modelo aprobado."
+      - "El sistema valida las variables requeridas por el modelo."
+      - "El sistema genera la probabilidad de recuperación para cada obligación."
+      - "El sistema valida que las probabilidades estén dentro del rango permitido."
+      - "El sistema registra el modelo y versión utilizados."
+      - "El sistema almacena los resultados de predicción."
+
+    alternative_flows:
+      - "Si una obligación no contiene las variables mínimas, el sistema la marca como no evaluable."
+      - "Si no existe un modelo aprobado, el sistema no genera predicciones."
+      - "Si una probabilidad se encuentra fuera del rango válido, el resultado es rechazado."
+
+    postconditions:
+      - "Las obligaciones evaluables cuentan con una probabilidad de recuperación registrada."
+
+    business_rules:
+      - RN-007
+      - RN-008
+      - RN-014
+      - RN-017
+      - RN-024
+
+
+  - id: CU-008
+    related_requirement: RF-008
+    primary_actor: ACT-002
+    name: "Valoración de cartera"
+
+    objective: >
+      Estimar el valor económico de una cartera utilizando las recuperaciones
+      esperadas, los costos y los supuestos financieros definidos.
+
+    preconditions:
+      - "Debe existir una cartera identificada."
+      - "Deben existir estimaciones de recuperación o información suficiente para proyectarlas."
+      - "Debe existir una tasa de descuento definida para el escenario."
+
+    main_flow:
+      - "El analista financiero selecciona la cartera a valorar."
+      - "El sistema recupera las probabilidades y estimaciones de recuperación."
+      - "El sistema proyecta los flujos de recuperación."
+      - "El sistema incorpora los costos de recuperación disponibles."
+      - "El sistema aplica la tasa de descuento definida."
+      - "El sistema calcula el valor económico estimado de la cartera."
+      - "El sistema registra los supuestos y resultados de valoración."
+
+    alternative_flows:
+      - "Si no existe información suficiente para proyectar recuperaciones, el sistema marca la valoración como incompleta."
+      - "Si no existe una tasa de descuento válida, el sistema no calcula el valor presente."
+      - "Si se selecciona un escenario alternativo, el sistema aplica los parámetros correspondientes."
+
+    postconditions:
+      - "Existe una valoración financiera registrada para la cartera y escenario analizados."
+
+    business_rules:
+      - RN-009
+      - RN-011
+      - RN-012
+      - RN-013
+      - RN-015
+      - RN-020
+
+
+  - id: CU-009
+    related_requirement: RF-009
+    primary_actor: ACT-002
+    name: "Cálculo de indicadores financieros"
+
+    objective: >
+      Calcular indicadores financieros que permitan analizar la rentabilidad
+      y conveniencia económica de una cartera.
+
+    preconditions:
+      - "Deben existir flujos financieros proyectados."
+      - "Debe existir información suficiente para calcular los indicadores solicitados."
+
+    main_flow:
+      - "El analista financiero selecciona una valoración."
+      - "El sistema recupera los flujos proyectados y parámetros financieros."
+      - "El sistema calcula el VPN."
+      - "El sistema calcula la TIR cuando los flujos lo permiten."
+      - "El sistema calcula el ROI."
+      - "El sistema registra los indicadores obtenidos."
+      - "El sistema presenta los resultados al analista."
+
+    alternative_flows:
+      - "Si no es posible calcular la TIR, el sistema informa la condición."
+      - "Si faltan flujos o parámetros, el sistema no calcula el indicador afectado."
+      - "Si existen escenarios alternativos, el sistema calcula los indicadores por escenario."
+
+    postconditions:
+      - "Los indicadores financieros calculados quedan asociados a la valoración correspondiente."
+
+    business_rules:
+      - RN-010
+      - RN-011
+      - RN-012
+      - RN-013
+      - RN-015
+      - RN-020
+
+
+  - id: CU-010
+    related_requirement: RF-010
+    primary_actor: ACT-001
+    name: "Consulta de resultados"
+
+    objective: >
+      Permitir consultar los resultados generados por los procesos
+      de predicción, evaluación de modelos y valoración financiera.
+
+    preconditions:
+      - "Deben existir resultados previamente generados y almacenados."
+
+    main_flow:
+      - "El usuario accede al módulo de consulta."
+      - "El usuario define los filtros de búsqueda."
+      - "El sistema recupera los resultados disponibles."
+      - "El sistema presenta las predicciones y resultados asociados."
+      - "El sistema muestra las referencias de modelo cuando corresponda."
+      - "El sistema muestra la información de valoración financiera disponible."
+      - "El usuario consulta el detalle del resultado seleccionado."
+
+    alternative_flows:
+      - "Si no existen resultados para los filtros seleccionados, el sistema informa que no se encontraron datos."
+      - "Si un resultado no tiene valoración asociada, el sistema presenta únicamente la información disponible."
+
+    postconditions:
+      - "El usuario ha podido consultar los resultados disponibles sin modificar la información almacenada."
+
+    business_rules:
+      - RN-014
+      - RN-015
+      - RN-018
+      - RN-024
