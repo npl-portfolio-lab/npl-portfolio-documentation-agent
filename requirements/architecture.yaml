@@ -1,0 +1,190 @@
+architecture:
+  components:
+
+    - id: ARC-001
+      name: Ingesta de datos
+      description: >
+        Componente responsable de recibir e incorporar
+        los datos históricos de cartera al sistema.
+      related_requirements:
+        - RF-001
+      related_use_cases:
+        - CU-001
+      related_business_rules:
+        - RN-001
+        - RN-021
+        - RN-022
+        - RN-023
+
+    - id: ARC-002
+      name: Calidad de datos
+      description: >
+        Componente responsable de validar estructura,
+        duplicados, valores inválidos y consistencia
+        de la información recibida.
+      related_requirements:
+        - RF-002
+      related_use_cases:
+        - CU-002
+      related_business_rules:
+        - RN-001
+        - RN-002
+        - RN-003
+        - RN-021
+        - RN-022
+        - RN-023
+
+    - id: ARC-003
+      name: Transformación de datos
+      description: >
+        Componente encargado de limpiar, estandarizar
+        y transformar los datos antes de su persistencia
+        y procesamiento analítico.
+      related_requirements:
+        - RF-003
+      related_use_cases:
+        - CU-003
+      related_business_rules:
+        - RN-003
+        - RN-021
+        - RN-022
+        - RN-023
+
+    - id: ARC-004
+      name: Persistencia
+      description: >
+        Componente responsable de almacenar información
+        validada y transformada manteniendo integridad
+        y trazabilidad.
+      related_requirements:
+        - RF-004
+      related_use_cases:
+        - CU-004
+      related_business_rules:
+        - RN-004
+        - RN-021
+        - RN-024
+
+    - id: ARC-005
+      name: Entrenamiento de Machine Learning
+      description: >
+        Componente encargado de preparar datasets,
+        entrenar modelos y registrar sus parámetros
+        y resultados.
+      related_requirements:
+        - RF-005
+      related_use_cases:
+        - CU-005
+      related_business_rules:
+        - RN-005
+        - RN-016
+        - RN-017
+        - RN-018
+        - RN-024
+
+    - id: ARC-006
+      name: Evaluación y selección de modelos
+      description: >
+        Componente responsable de calcular métricas,
+        comparar modelos y seleccionar modelos aprobados.
+      related_requirements:
+        - RF-006
+      related_use_cases:
+        - CU-006
+      related_business_rules:
+        - RN-005
+        - RN-006
+        - RN-018
+        - RN-019
+
+    - id: ARC-007
+      name: Scoring y predicción
+      description: >
+        Componente responsable de generar probabilidades
+        de recuperación utilizando modelos aprobados.
+      related_requirements:
+        - RF-007
+      related_use_cases:
+        - CU-007
+      related_business_rules:
+        - RN-007
+        - RN-008
+        - RN-014
+        - RN-017
+        - RN-024
+
+    - id: ARC-008
+      name: Valoración financiera
+      description: >
+        Componente encargado de proyectar recuperaciones
+        y realizar la valoración económica de las carteras.
+      related_requirements:
+        - RF-008
+      related_use_cases:
+        - CU-008
+      related_business_rules:
+        - RN-009
+        - RN-011
+        - RN-012
+        - RN-013
+        - RN-015
+        - RN-020
+
+    - id: ARC-009
+      name: Indicadores financieros
+      description: >
+        Componente responsable de calcular VPN, TIR,
+        ROI y otros indicadores derivados de la valoración.
+      related_requirements:
+        - RF-009
+      related_use_cases:
+        - CU-009
+      related_business_rules:
+        - RN-010
+        - RN-011
+        - RN-012
+        - RN-013
+        - RN-015
+        - RN-020
+
+    - id: ARC-010
+      name: Consulta de resultados
+      description: >
+        Componente responsable de exponer y consultar
+        predicciones, métricas, valoraciones e indicadores.
+      related_requirements:
+        - RF-010
+      related_use_cases:
+        - CU-010
+      related_business_rules:
+        - RN-014
+        - RN-015
+        - RN-018
+        - RN-024
+
+  cross_cutting_components:
+
+    - id: ARC-X01
+      name: Gobernanza y trazabilidad
+      description: >
+        Responsabilidad transversal para registrar
+        origen de datos, procesos, modelos, parámetros,
+        métricas y resultados.
+      related_requirements: []
+      related_use_cases: []
+      related_business_rules:
+        - RN-014
+        - RN-015
+        - RN-018
+        - RN-021
+        - RN-024
+
+    - id: ARC-X02
+      name: Documentación automatizada
+      description: >
+        Responsabilidad transversal para generar
+        documentación estructurada y trazable a partir
+        de las fuentes de verdad del proyecto.
+      related_requirements: []
+      related_use_cases: []
+      related_business_rules: []

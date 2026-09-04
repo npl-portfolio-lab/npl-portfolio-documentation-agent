@@ -1,0 +1,907 @@
+data_model:
+  entities:
+
+    - id: ENT-001
+      name: Portfolio
+      description: >
+        Representa una cartera NPL que será analizada
+        y valorada.
+
+      fields:
+        - name: portfolio_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la cartera.
+
+        - name: name
+          type: string
+          nullable: false
+          description: Nombre descriptivo de la cartera.
+
+        - name: description
+          type: string
+          nullable: true
+          description: Descripción general de la cartera.
+
+        - name: acquisition_price
+          type: decimal
+          nullable: true
+          description: Precio pagado o propuesto por la adquisición de la cartera.
+
+        - name: total_nominal_balance
+          type: decimal
+          nullable: false
+          description: Saldo nominal total de las obligaciones de la cartera.
+
+        - name: currency
+          type: string
+          nullable: false
+          description: Moneda utilizada para los valores financieros de la cartera.
+
+        - name: created_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de creación del registro.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado operativo de la cartera.
+
+      constraints:
+        - portfolio_id debe ser único.
+        - total_nominal_balance debe ser mayor o igual a cero.
+        - acquisition_price debe ser mayor o igual a cero cuando exista.
+
+      relationships:
+        - target_entity: ENT-002
+          type: one_to_many
+          description: Una cartera puede contener múltiples obligaciones.
+
+        - target_entity: ENT-008
+          type: one_to_many
+          description: Una cartera puede tener múltiples escenarios de valoración.
+
+        - target_entity: ENT-009
+          type: one_to_many
+          description: Una cartera puede tener múltiples valoraciones.
+
+      related_requirements:
+        - RF-008
+        - RF-009
+        - RF-010
+
+      related_use_cases:
+        - CU-008
+        - CU-009
+        - CU-010
+
+      related_business_rules: []
+
+    - id: ENT-002
+      name: Obligation
+      description: >
+        Representa cada crédito, deuda u obligación
+        perteneciente a una cartera.
+
+      fields:
+        - name: obligation_id
+          type: UUID
+          nullable: false
+          description: Identificador único interno de la obligación.
+
+        - name: portfolio_id
+          type: UUID
+          nullable: false
+          description: Identificador de la cartera a la que pertenece la obligación.
+
+        - name: external_id
+          type: string
+          nullable: true
+          description: Identificador de la obligación en la fuente de origen.
+
+        - name: debtor_id
+          type: string
+          nullable: true
+          description: Identificador anonimizado o pseudonimizado del deudor.
+
+        - name: original_amount
+          type: decimal
+          nullable: true
+          description: Valor original de la obligación.
+
+        - name: outstanding_balance
+          type: decimal
+          nullable: false
+          description: Saldo vigente de la obligación.
+
+        - name: days_past_due
+          type: integer
+          nullable: true
+          description: Número de días de mora de la obligación.
+
+        - name: default_date
+          type: date
+          nullable: true
+          description: Fecha asociada al incumplimiento de la obligación.
+
+        - name: product_type
+          type: string
+          nullable: true
+          description: Tipo de producto financiero asociado.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado actual de la obligación.
+
+        - name: created_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de creación del registro.
+
+      constraints:
+        - obligation_id debe ser único.
+        - outstanding_balance debe ser mayor o igual a cero.
+        - original_amount debe ser mayor o igual a cero cuando exista.
+        - days_past_due debe ser mayor o igual a cero cuando exista.
+        - Las fechas asociadas a la obligación deben mantener consistencia temporal.
+
+      relationships:
+        - target_entity: ENT-001
+          type: many_to_one
+          description: Cada obligación pertenece a una cartera.
+
+        - target_entity: ENT-004
+          type: one_to_many
+          description: Una obligación puede tener múltiples incidencias de calidad.
+
+        - target_entity: ENT-007
+          type: one_to_many
+          description: Una obligación puede recibir múltiples predicciones.
+
+      related_requirements:
+        - RF-001
+        - RF-002
+        - RF-003
+        - RF-007
+
+      related_use_cases:
+        - CU-001
+        - CU-002
+        - CU-003
+        - CU-007
+
+      related_business_rules:
+        - RN-021
+        - RN-022
+        - RN-023
+
+    - id: ENT-003
+      name: DataLoad
+      description: >
+        Representa cada proceso de carga de información.
+
+      fields:
+        - name: load_id
+          type: UUID
+          nullable: false
+          description: Identificador único del proceso de carga.
+
+        - name: source_name
+          type: string
+          nullable: false
+          description: Nombre de la fuente de datos.
+
+        - name: source_type
+          type: string
+          nullable: false
+          description: Tipo de fuente utilizada.
+
+        - name: file_name
+          type: string
+          nullable: true
+          description: Nombre del archivo recibido cuando corresponda.
+
+        - name: received_records
+          type: integer
+          nullable: false
+          description: Cantidad total de registros recibidos.
+
+        - name: valid_records
+          type: integer
+          nullable: false
+          description: Cantidad de registros considerados válidos.
+
+        - name: invalid_records
+          type: integer
+          nullable: false
+          description: Cantidad de registros con incidencias.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado del proceso de carga.
+
+        - name: loaded_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de ejecución de la carga.
+
+      constraints:
+        - load_id debe ser único.
+        - received_records debe ser mayor o igual a cero.
+        - valid_records debe ser mayor o igual a cero.
+        - invalid_records debe ser mayor o igual a cero.
+        - La suma de registros válidos e inválidos no debe superar los registros recibidos.
+
+      relationships:
+        - target_entity: ENT-004
+          type: one_to_many
+          description: Una carga puede producir múltiples incidencias de calidad.
+
+      related_requirements:
+        - RF-001
+
+      related_use_cases:
+        - CU-001
+
+      related_business_rules:
+        - RN-001
+        - RN-004
+        - RN-024
+
+    - id: ENT-004
+      name: DataQualityIssue
+      description: >
+        Representa incidencias detectadas durante
+        los procesos de calidad de datos.
+
+      fields:
+        - name: issue_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la incidencia.
+
+        - name: load_id
+          type: UUID
+          nullable: false
+          description: Identificador de la carga donde se detectó la incidencia.
+
+        - name: obligation_id
+          type: UUID
+          nullable: true
+          description: Identificador de la obligación afectada cuando corresponda.
+
+        - name: rule_code
+          type: string
+          nullable: false
+          description: Código de la regla o validación que generó la incidencia.
+
+        - name: issue_type
+          type: string
+          nullable: false
+          description: Tipo de incidencia detectada.
+
+        - name: field_name
+          type: string
+          nullable: true
+          description: Campo afectado por la incidencia.
+
+        - name: detected_value
+          type: string
+          nullable: true
+          description: Valor detectado que originó la incidencia.
+
+        - name: severity
+          type: string
+          nullable: false
+          description: Severidad de la incidencia.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado de tratamiento de la incidencia.
+
+        - name: detected_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora en que se detectó la incidencia.
+
+      constraints:
+        - issue_id debe ser único.
+        - load_id debe referenciar una carga existente.
+        - severity debe utilizar valores controlados.
+        - status debe utilizar valores controlados.
+
+      relationships:
+        - target_entity: ENT-003
+          type: many_to_one
+          description: Cada incidencia pertenece a una carga de datos.
+
+        - target_entity: ENT-002
+          type: many_to_one_optional
+          description: Una incidencia puede estar asociada a una obligación específica.
+
+      related_requirements:
+        - RF-002
+
+      related_use_cases:
+        - CU-002
+
+      related_business_rules:
+        - RN-001
+        - RN-002
+        - RN-003
+        - RN-022
+        - RN-023
+
+    - id: ENT-005
+      name: MLModel
+      description: >
+        Representa un modelo de Machine Learning
+        entrenado dentro del sistema.
+
+      fields:
+        - name: model_id
+          type: UUID
+          nullable: false
+          description: Identificador único del modelo.
+
+        - name: name
+          type: string
+          nullable: false
+          description: Nombre del modelo.
+
+        - name: algorithm
+          type: string
+          nullable: false
+          description: Algoritmo de Machine Learning utilizado.
+
+        - name: version
+          type: string
+          nullable: false
+          description: Versión del modelo.
+
+        - name: target_variable
+          type: string
+          nullable: false
+          description: Variable objetivo utilizada durante el entrenamiento.
+
+        - name: feature_set
+          type: JSON
+          nullable: false
+          description: Conjunto de variables predictoras utilizadas.
+
+        - name: parameters
+          type: JSON
+          nullable: false
+          description: Parámetros utilizados para entrenar el modelo.
+
+        - name: training_dataset_version
+          type: string
+          nullable: false
+          description: Versión del dataset utilizado durante el entrenamiento.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado del modelo dentro de su ciclo de vida.
+
+        - name: trained_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de entrenamiento.
+
+      constraints:
+        - model_id debe ser único.
+        - La combinación de nombre y versión debe permitir identificar un modelo de forma inequívoca.
+        - Un modelo utilizado para predicción debe encontrarse previamente evaluado y aprobado.
+
+      relationships:
+        - target_entity: ENT-006
+          type: one_to_many
+          description: Un modelo puede tener múltiples métricas de evaluación.
+
+        - target_entity: ENT-007
+          type: one_to_many
+          description: Un modelo puede generar múltiples predicciones.
+
+      related_requirements:
+        - RF-005
+        - RF-006
+        - RF-007
+
+      related_use_cases:
+        - CU-005
+        - CU-006
+        - CU-007
+
+      related_business_rules:
+        - RN-005
+        - RN-006
+        - RN-014
+        - RN-016
+        - RN-017
+        - RN-024
+
+    - id: ENT-006
+      name: ModelMetric
+      description: >
+        Representa las métricas obtenidas durante
+        la evaluación de los modelos.
+
+      fields:
+        - name: metric_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la métrica.
+
+        - name: model_id
+          type: UUID
+          nullable: false
+          description: Identificador del modelo evaluado.
+
+        - name: dataset_type
+          type: string
+          nullable: false
+          description: Tipo de dataset utilizado para calcular la métrica.
+
+        - name: metric_name
+          type: string
+          nullable: false
+          description: Nombre de la métrica calculada.
+
+        - name: metric_value
+          type: decimal
+          nullable: false
+          description: Valor obtenido para la métrica.
+
+        - name: calculated_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de cálculo de la métrica.
+
+      constraints:
+        - metric_id debe ser único.
+        - model_id debe referenciar un modelo existente.
+        - metric_value debe encontrarse dentro del rango válido de la métrica correspondiente.
+
+      relationships:
+        - target_entity: ENT-005
+          type: many_to_one
+          description: Cada métrica pertenece a un modelo.
+
+      related_requirements:
+        - RF-005
+        - RF-006
+
+      related_use_cases:
+        - CU-005
+        - CU-006
+
+      related_business_rules:
+        - RN-005
+        - RN-006
+        - RN-018
+        - RN-019
+
+    - id: ENT-007
+      name: Prediction
+      description: >
+        Representa una predicción de recuperación
+        generada para una obligación.
+
+      fields:
+        - name: prediction_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la predicción.
+
+        - name: obligation_id
+          type: UUID
+          nullable: false
+          description: Identificador de la obligación evaluada.
+
+        - name: model_id
+          type: UUID
+          nullable: false
+          description: Identificador del modelo utilizado.
+
+        - name: recovery_probability
+          type: decimal
+          nullable: false
+          description: Probabilidad estimada de recuperación.
+
+        - name: expected_recovery_amount
+          type: decimal
+          nullable: true
+          description: Valor esperado de recuperación cuando sea calculado.
+
+        - name: prediction_date
+          type: datetime
+          nullable: false
+          description: Fecha y hora de generación de la predicción.
+
+        - name: model_version
+          type: string
+          nullable: false
+          description: Versión del modelo utilizado.
+
+      constraints:
+        - prediction_id debe ser único.
+        - recovery_probability debe encontrarse entre 0 y 1.
+        - expected_recovery_amount debe ser mayor o igual a cero cuando exista.
+        - model_id debe referenciar un modelo evaluado y aprobado.
+
+      relationships:
+        - target_entity: ENT-002
+          type: many_to_one
+          description: Cada predicción pertenece a una obligación.
+
+        - target_entity: ENT-005
+          type: many_to_one
+          description: Cada predicción es generada por un modelo.
+
+      related_requirements:
+        - RF-007
+
+      related_use_cases:
+        - CU-007
+
+      related_business_rules:
+        - RN-007
+        - RN-008
+        - RN-014
+        - RN-024
+
+    - id: ENT-008
+      name: ValuationScenario
+      description: >
+        Representa los supuestos utilizados
+        para valorar una cartera.
+
+      fields:
+        - name: scenario_id
+          type: UUID
+          nullable: false
+          description: Identificador único del escenario.
+
+        - name: portfolio_id
+          type: UUID
+          nullable: false
+          description: Identificador de la cartera asociada.
+
+        - name: name
+          type: string
+          nullable: false
+          description: Nombre del escenario de valoración.
+
+        - name: discount_rate
+          type: decimal
+          nullable: false
+          description: Tasa de descuento utilizada para descontar flujos futuros.
+
+        - name: recovery_cost_rate
+          type: decimal
+          nullable: true
+          description: Tasa estimada de costos de recuperación.
+
+        - name: description
+          type: string
+          nullable: true
+          description: Descripción de los supuestos del escenario.
+
+        - name: created_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de creación del escenario.
+
+      constraints:
+        - scenario_id debe ser único.
+        - discount_rate debe ser mayor o igual a cero.
+        - recovery_cost_rate debe ser mayor o igual a cero cuando exista.
+
+      relationships:
+        - target_entity: ENT-001
+          type: many_to_one
+          description: Cada escenario pertenece a una cartera.
+
+        - target_entity: ENT-009
+          type: one_to_many
+          description: Un escenario puede utilizarse en múltiples valoraciones.
+
+      related_requirements:
+        - RF-008
+        - RF-009
+
+      related_use_cases:
+        - CU-008
+        - CU-009
+
+      related_business_rules:
+        - RN-011
+        - RN-012
+        - RN-020
+
+    - id: ENT-009
+      name: Valuation
+      description: >
+        Representa el resultado de valorar
+        financieramente una cartera.
+
+      fields:
+        - name: valuation_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la valoración.
+
+        - name: portfolio_id
+          type: UUID
+          nullable: false
+          description: Identificador de la cartera valorada.
+
+        - name: scenario_id
+          type: UUID
+          nullable: false
+          description: Identificador del escenario aplicado.
+
+        - name: expected_recovery
+          type: decimal
+          nullable: false
+          description: Recuperación económica esperada de la cartera.
+
+        - name: recovery_cost
+          type: decimal
+          nullable: true
+          description: Costos estimados asociados a la recuperación.
+
+        - name: present_value
+          type: decimal
+          nullable: true
+          description: Valor presente de los flujos de recuperación.
+
+        - name: valuation_date
+          type: datetime
+          nullable: false
+          description: Fecha y hora de ejecución de la valoración.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado de la valoración.
+
+      constraints:
+        - valuation_id debe ser único.
+        - expected_recovery debe ser mayor o igual a cero.
+        - recovery_cost debe ser mayor o igual a cero cuando exista.
+
+      relationships:
+        - target_entity: ENT-001
+          type: many_to_one
+          description: Cada valoración pertenece a una cartera.
+
+        - target_entity: ENT-008
+          type: many_to_one
+          description: Cada valoración utiliza un escenario de valoración.
+
+        - target_entity: ENT-010
+          type: one_to_many
+          description: Una valoración puede generar múltiples flujos financieros.
+
+        - target_entity: ENT-011
+          type: one_to_many
+          description: Una valoración puede generar múltiples indicadores financieros.
+
+      related_requirements:
+        - RF-008
+
+      related_use_cases:
+        - CU-008
+
+      related_business_rules:
+        - RN-009
+        - RN-011
+        - RN-012
+        - RN-015
+        - RN-020
+
+    - id: ENT-010
+      name: CashFlow
+      description: >
+        Representa los flujos proyectados
+        de recuperación.
+
+      fields:
+        - name: cash_flow_id
+          type: UUID
+          nullable: false
+          description: Identificador único del flujo.
+
+        - name: valuation_id
+          type: UUID
+          nullable: false
+          description: Identificador de la valoración asociada.
+
+        - name: period
+          type: integer
+          nullable: false
+          description: Periodo temporal al que corresponde el flujo.
+
+        - name: recovery_amount
+          type: decimal
+          nullable: false
+          description: Valor de recuperación proyectado para el periodo.
+
+        - name: recovery_cost
+          type: decimal
+          nullable: true
+          description: Costo de recuperación proyectado para el periodo.
+
+        - name: net_cash_flow
+          type: decimal
+          nullable: false
+          description: Flujo neto obtenido después de considerar costos.
+
+        - name: discounted_cash_flow
+          type: decimal
+          nullable: true
+          description: Flujo neto descontado a valor presente.
+
+      constraints:
+        - cash_flow_id debe ser único.
+        - period debe ser mayor o igual a cero.
+        - recovery_amount debe ser mayor o igual a cero.
+        - recovery_cost debe ser mayor o igual a cero cuando exista.
+
+      relationships:
+        - target_entity: ENT-009
+          type: many_to_one
+          description: Cada flujo pertenece a una valoración.
+
+      related_requirements:
+        - RF-008
+        - RF-009
+
+      related_use_cases:
+        - CU-008
+        - CU-009
+
+      related_business_rules:
+        - RN-011
+        - RN-012
+        - RN-013
+
+    - id: ENT-011
+      name: FinancialIndicator
+      description: >
+        Representa los indicadores financieros
+        calculados para una valoración.
+
+      fields:
+        - name: indicator_id
+          type: UUID
+          nullable: false
+          description: Identificador único del indicador.
+
+        - name: valuation_id
+          type: UUID
+          nullable: false
+          description: Identificador de la valoración asociada.
+
+        - name: indicator_name
+          type: string
+          nullable: false
+          description: Nombre del indicador financiero.
+
+        - name: indicator_value
+          type: decimal
+          nullable: false
+          description: Valor calculado para el indicador.
+
+        - name: calculated_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de cálculo del indicador.
+
+      constraints:
+        - indicator_id debe ser único.
+        - valuation_id debe referenciar una valoración existente.
+        - indicator_name debe utilizar valores soportados por el sistema.
+
+      relationships:
+        - target_entity: ENT-009
+          type: many_to_one
+          description: Cada indicador pertenece a una valoración.
+
+      related_requirements:
+        - RF-009
+
+      related_use_cases:
+        - CU-009
+
+      related_business_rules:
+        - RN-010
+        - RN-015
+        - RN-020
+
+    - id: ENT-012
+      name: ProcessExecution
+      description: >
+        Representa la ejecución de procesos
+        para auditoría, trazabilidad y reproducibilidad.
+
+      fields:
+        - name: execution_id
+          type: UUID
+          nullable: false
+          description: Identificador único de la ejecución.
+
+        - name: process_type
+          type: string
+          nullable: false
+          description: Tipo general de proceso ejecutado.
+
+        - name: process_name
+          type: string
+          nullable: false
+          description: Nombre específico del proceso.
+
+        - name: input_reference
+          type: string
+          nullable: true
+          description: Referencia a los datos o artefactos utilizados como entrada.
+
+        - name: parameters
+          type: JSON
+          nullable: true
+          description: Parámetros utilizados durante la ejecución.
+
+        - name: status
+          type: string
+          nullable: false
+          description: Estado de la ejecución.
+
+        - name: started_at
+          type: datetime
+          nullable: false
+          description: Fecha y hora de inicio de la ejecución.
+
+        - name: finished_at
+          type: datetime
+          nullable: true
+          description: Fecha y hora de finalización.
+
+        - name: error_message
+          type: string
+          nullable: true
+          description: Mensaje de error cuando la ejecución falla.
+
+      constraints:
+        - execution_id debe ser único.
+        - finished_at no puede ser anterior a started_at cuando exista.
+        - status debe utilizar valores controlados.
+
+      relationships: []
+
+      related_requirements:
+        - RF-001
+        - RF-003
+        - RF-005
+        - RF-007
+        - RF-008
+        - RF-009
+
+      related_use_cases:
+        - CU-001
+        - CU-003
+        - CU-005
+        - CU-007
+        - CU-008
+        - CU-009
+
+      related_business_rules:
+        - RN-014
+        - RN-015
+        - RN-018
+        - RN-024
